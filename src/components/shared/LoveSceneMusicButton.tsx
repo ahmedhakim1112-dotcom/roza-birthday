@@ -26,12 +26,12 @@ export function LoveSceneMusicButton({
       whileHover={{ scale: 1.025 }}
       whileTap={{ scale: 0.97 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
-      className="absolute left-7 top-7 z-[170] flex w-[245px] items-center gap-3 overflow-hidden rounded-2xl border border-white/20 bg-white/[0.12] px-3 py-2.5 text-white shadow-[0_16px_42px_rgba(90,10,35,0.22)] backdrop-blur-xl transition hover:border-white/30 hover:bg-white/[0.16]"
+      className="absolute left-7 top-7 z-[170] flex w-[245px] items-center gap-3 overflow-hidden rounded-2xl border border-white/20 bg-white/[0.12] px-3 py-2.5 text-white shadow-[0_16px_42px_rgba(90,10,35,0.22)] backdrop-blur-xl transition hover:border-white/30 hover:bg-white/[0.16] max-sm:left-5 max-sm:top-5 max-sm:w-[205px] max-sm:gap-2 max-sm:rounded-xl max-sm:px-2.5 max-sm:py-2"
       aria-label={isPlaying ? "Pause love scene music" : "Play love scene music"}
     >
       <span className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/16 via-[#ff9ab3]/10 to-transparent" />
 
-      <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-xl border border-white/20 bg-white/10 shadow-[0_8px_22px_rgba(0,0,0,0.16)]">
+      <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-xl border border-white/20 bg-white/10 shadow-[0_8px_22px_rgba(0,0,0,0.16)] max-sm:h-9 max-sm:w-9">
         <img
           src={loveTrack.cover}
           alt={loveTrack.title}
@@ -42,15 +42,15 @@ export function LoveSceneMusicButton({
       </span>
 
       <span className="relative min-w-0 flex-1 text-left">
-        <span className="block truncate text-[13px] font-semibold leading-tight text-white">
+        <span className="block truncate text-[13px] font-semibold leading-tight text-white max-sm:text-[12px]">
           {loveTrack.title}
         </span>
-        <span className="mt-1 block truncate text-[11px] leading-tight text-white/65">
+        <span className="mt-1 block truncate text-[11px] leading-tight text-white/65 max-sm:text-[10px]">
           {loveTrack.subtitle}
         </span>
       </span>
 
-      <span className="relative grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/18 text-white shadow-[inset_0_0_18px_rgba(255,255,255,0.08)]">
+      <span className="relative grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/18 text-white shadow-[inset_0_0_18px_rgba(255,255,255,0.08)] max-sm:h-7 max-sm:w-7">
         {isPlaying ? (
           <span className="flex h-3.5 w-3.5 items-center justify-center gap-[3px]">
             <span className="h-3.5 w-[3px] rounded-full bg-white" />

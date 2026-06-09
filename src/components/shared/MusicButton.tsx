@@ -71,6 +71,7 @@ export default function MusicButton() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.72);
   const [showVolume, setShowVolume] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
@@ -198,7 +199,10 @@ export default function MusicButton() {
     window.addEventListener(STOP_GLOBAL_MUSIC_EVENT, handleStopGlobalMusic);
 
     return () => {
-      window.removeEventListener(STOP_GLOBAL_MUSIC_EVENT, handleStopGlobalMusic);
+      window.removeEventListener(
+        STOP_GLOBAL_MUSIC_EVENT,
+        handleStopGlobalMusic,
+      );
     };
   }, [clearFadeTimer]);
 
@@ -389,6 +393,7 @@ export default function MusicButton() {
 
       if (!wrapperRef.current.contains(event.target as Node)) {
         setShowVolume(false);
+        setIsExpanded(false);
       }
     };
 
@@ -417,9 +422,9 @@ export default function MusicButton() {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: 1.35, duration: 0.75, ease: "easeOut" }}
       onClick={(event) => event.stopPropagation()}
-      className="fixed bottom-5 left-5 z-50"
+      className="fixed bottom-5 left-5 z-50 max-lg:bottom-4 max-lg:left-auto max-lg:right-4"
     >
-      <div className="relative">
+      <div className="relative hidden lg:block">
         <div className="flex w-[285px] items-center gap-3 rounded-2xl border border-white/45 bg-white/75 px-3 py-3 shadow-[0_18px_45px_rgba(190,70,115,0.20)] backdrop-blur-xl">
           <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-pink-100">
             <Image
@@ -532,6 +537,156 @@ export default function MusicButton() {
             </motion.div>
           )}
         </AnimatePresence>
+      </div>
+
+      <div className="relative lg:hidden">
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, y: 18, scale: 0.88 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 14, scale: 0.9 }}
+              transition={{ duration: 0.22, ease: "easeOut" }}
+              className="absolute bottom-[58px] right-0 w-[218px] rounded-[18px] border border-white/45 bg-white/82 p-2.5 shadow-[0_14px_34px_rgba(120,35,75,0.18)] backdrop-blur-xl max-sm:w-[210px] max-sm:rounded-[17px] max-sm:p-2"
+            >
+              <div className="flex items-center gap-2">
+                <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-[14px] bg-pink-100 max-sm:h-10 max-sm:w-10">
+                  <Image
+                    src={currentTrack.cover}
+                    alt={currentTrack.title}
+                    fill
+                    sizes="36px"
+                    className="object-cover"
+                    draggable={false}
+                  />
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[12.5px] font-bold text-pink-950 max-sm:text-[12px]">
+                    {currentTrack.title}
+                  </p>
+                  <p className="truncate text-[10.5px] text-pink-900/55 max-sm:text-[10px]">
+                    {currentTrack.subtitle}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setShowVolume((prev) => !prev)}
+                  className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-pink-100/90 text-[11px] text-pink-700"
+                  aria-label="Volume"
+                >
+                  ♫
+                </button>
+              </div>
+
+              <div className="mt-2.5 flex items-center justify-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={handlePrev}
+                  className="grid h-7 w-7 place-items-center rounded-full bg-white/75 text-[14px] text-pink-700 shadow-sm"
+                  aria-label="Previous song"
+                >
+                  ‹
+                </button>
+
+                <button
+                  type="button"
+                  onClick={togglePlay}
+                  className="grid h-8.5 w-8.5 place-items-center rounded-full bg-pink-500 text-[12px] text-white shadow-[0_8px_18px_rgba(236,72,153,0.30)]"
+                  aria-label={isPlaying ? "Pause music" : "Play music"}
+                >
+                  {isPlaying ? (
+                    "Ⅱ"
+                  ) : (
+                    <span className="ml-[2px] h-0 w-0 border-y-[6px] border-l-[10px] border-y-transparent border-l-white" />
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  className="grid h-8 w-8 place-items-center rounded-full bg-white/75 text-[16px] text-pink-700 shadow-sm"
+                  aria-label="Next song"
+                >
+                  ›
+                </button>
+              </div>
+
+              <div className="mt-2">
+                <input
+                  type="range"
+                  min={0}
+                  max={duration || 0}
+                  value={Math.min(currentTime, duration || 0)}
+                  onChange={handleProgressChange}
+                  className="h-1 w-full cursor-pointer accent-pink-500"
+                  aria-label="Music progress"
+                />
+
+                <div className="mt-0.5 flex items-center justify-between text-[8px] text-pink-900/45">
+                  <span>{formatTime(currentTime)}</span>
+                  <span>{formatTime(duration)}</span>
+                </div>
+              </div>
+
+              <AnimatePresence>
+                {showVolume && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.18, ease: "easeOut" }}
+                    className="overflow-hidden"
+                  >
+                    <div className="mt-2 flex items-center gap-2 rounded-2xl bg-white/60 px-3 py-2">
+                      <span className="text-[11px] text-pink-700">♫</span>
+
+                      <input
+                        type="range"
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        value={volume}
+                        onChange={handleVolumeChange}
+                        className="w-full cursor-pointer accent-pink-500"
+                        aria-label="Volume control"
+                      />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <button
+          type="button"
+          onClick={() => setIsExpanded((prev) => !prev)}
+          className="relative grid h-12 w-12 place-items-center rounded-full border border-white/45 bg-white/80 shadow-[0_10px_22px_rgba(120,35,75,0.18)] backdrop-blur-xl"
+          aria-label="Open music player"
+        >
+          <span
+            className={`absolute inset-[5px] rounded-full border border-pink-200/70 border-t-pink-500/80 ${
+              isPlaying ? "animate-[spin_3.2s_linear_infinite]" : ""
+            }`}
+          />
+
+          <span className="relative h-8.5 w-8.5 overflow-hidden rounded-full">
+            <Image
+              src={currentTrack.cover}
+              alt={currentTrack.title}
+              fill
+              sizes="34px"
+              className="object-cover"
+              draggable={false}
+            />
+          </span>
+
+          <span className="absolute -right-0.5 -top-0.5 grid h-4.5 w-4.5 place-items-center rounded-full bg-pink-500 text-[8px] text-white shadow-sm">
+            ♫
+          </span>
+        </button>
       </div>
     </motion.div>
   );

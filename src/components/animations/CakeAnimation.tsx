@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 const cakeSlices = [
   { bottom: 18, width: 88, color: "#6f3f2a", delay: 0.25 },
@@ -9,7 +9,11 @@ const cakeSlices = [
   { bottom: 51, width: 84, color: "#c78355", delay: 1.75 },
 ];
 
-export function CakeAnimation() {
+type CakeAnimationProps = {
+  isCandleLit?: boolean;
+};
+
+export function CakeAnimation({ isCandleLit = true }: CakeAnimationProps) {
   return (
     <div className="relative mx-auto h-[105px] w-[140px]">
       <motion.div
@@ -84,11 +88,35 @@ export function CakeAnimation() {
         transition={{ delay: 3.55, duration: 0.45, type: "spring" }}
         className="absolute bottom-[82px] left-1/2 h-[25px] w-[3px] -translate-x-1/2 rounded-full bg-[#ffd166]"
       >
-        <motion.span
-          animate={{ scale: [1, 1.25, 1], opacity: [0.75, 1, 0.75] }}
-          transition={{ duration: 0.6, repeat: Infinity }}
-          className="absolute -top-[8px] left-1/2 h-[9px] w-[6px] -translate-x-1/2 rounded-full bg-[#ff9f1c]"
-        />
+        <AnimatePresence>
+          {isCandleLit && (
+            <motion.span
+              key="cake-flame"
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: [1, 1.25, 1], opacity: [0.75, 1, 0.75] }}
+              exit={{ scale: 0.15, opacity: 0, y: -3 }}
+              transition={
+                isCandleLit
+                  ? { duration: 0.6, repeat: Infinity }
+                  : { duration: 0.25 }
+              }
+              className="absolute -top-[8px] left-1/2 h-[9px] w-[6px] -translate-x-1/2 rounded-full bg-[#ff9f1c]"
+            />
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {!isCandleLit && (
+            <motion.span
+              key="cake-smoke"
+              initial={{ opacity: 0, y: 0, scale: 0.45 }}
+              animate={{ opacity: [0, 0.55, 0], y: -18, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.85, ease: "easeOut" }}
+              className="absolute -top-[9px] left-1/2 h-[10px] w-[10px] -translate-x-1/2 rounded-full border border-white/45"
+            />
+          )}
+        </AnimatePresence>
       </motion.div>
     </div>
   );
