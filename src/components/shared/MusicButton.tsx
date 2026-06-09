@@ -15,6 +15,12 @@ type Track = {
 
 const tracks: Track[] = [
   {
+    title: "كل سنه وانت طيب",
+    subtitle: "كل سنه وانت طيب - تامر حسني",
+    src: "/music/song-4.mp3",
+    cover: "/music/cover-4.jpg",
+  },
+  {
     title: "thousand years",
     subtitle: "a thousand years – christina perri",
     src: "/music/song-1.mp3",
@@ -31,12 +37,6 @@ const tracks: Track[] = [
     subtitle: "هيجيلي موجوع - تامر عاشور",
     src: "/music/song-3.mp3",
     cover: "/music/cover-3.jpg",
-  },
-  {
-    title: " كل سنه وانت طيب",
-    subtitle: "كل سنه وانت طيب - تامر حسني",
-    src: "/music/song-4.mp3",
-    cover: "/music/cover-4.jpg",
   },
   {
     title: "اذكر يوما كنت بيافا",
